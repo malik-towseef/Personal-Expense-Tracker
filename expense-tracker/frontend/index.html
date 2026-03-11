@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Personal Expense Tracker">
+    <title>Expense Tracker Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar / Navigation -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h2>FinTracker</h2>
+            </div>
+            <nav>
+                <ul>
+                    <li class="active"><a href="#">Dashboard</a></li>
+                    <li><a href="#transactions-section">Transactions</a></li>
+                    <li><a href="#add-transaction">Add New</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-header">
+                <h1>Overview</h1>
+                <div class="header-actions" style="display: flex; gap: 1rem; align-items: center;">
+                    <div class="currency-selector">
+                        <select id="global-currency" style="padding: 0.5rem; border-radius: 8px; background: rgba(15, 23, 42, 0.6); color: var(--text-main); border: 1px solid var(--border); outline: none;">
+                            <option value="$">USD ($)</option>
+                            <option value="€">EUR (€)</option>
+                            <option value="£">GBP (£)</option>
+                            <option value="₹">INR (₹)</option>
+                            <option value="¥">JPY (¥)</option>
+                        </select>
+                    </div>
+                    <div class="user-profile">
+                        <img src="https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff" alt="User Profile">
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Summary Cards -->
+            <section class="summary-cards">
+                <div class="card balance-card">
+                    <p class="card-label">Total Balance</p>
+                    <h2 id="total-balance">$0.00</h2>
+                </div>
+                <div class="card income-card">
+                    <p class="card-label">Total Income</p>
+                    <h2 id="total-income">+$0.00</h2>
+                </div>
+                <div class="card expense-card">
+                    <p class="card-label">Total Expenses</p>
+                    <h2 id="total-expense">-$0.00</h2>
+                </div>
+            </section>
+
+            <div class="middle-section">
+                <!-- Add Transaction Form -->
+                <section id="add-transaction" class="glass-panel form-container">
+                    <h3>Add Transaction</h3>
+                    <form id="transaction-form">
+                        <input type="hidden" id="trans-id">
+                        <div class="form-group">
+                            <label for="trans-title">Title</label>
+                            <input type="text" id="trans-title" placeholder="e.g. Salary, Groceries" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="trans-amount">Amount</label>
+                                <input type="number" id="trans-amount" step="0.01" min="0.01" placeholder="0.00" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="trans-type">Type</label>
+                                <select id="trans-type" required>
+                                    <option value="income">Income</option>
+                                    <option value="expense">Expense</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="trans-category">Category</label>
+                                <select id="trans-category" required>
+                                    <option value="Salary">Salary</option>
+                                    <option value="Food">Food & Dining</option>
+                                    <option value="Transport">Transportation</option>
+                                    <option value="Housing">Housing & Rent</option>
+                                    <option value="Utilities">Utilities</option>
+                                    <option value="Entertainment">Entertainment</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="trans-date">Date</label>
+                                <input type="date" id="trans-date" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-primary" id="submit-btn">Save Transaction</button>
+                    </form>
+                </section>
+
+                <!-- Analytics / Pie Chart -->
+                <section class="glass-panel chart-container">
+                    <h3>Expenses by Category</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="expenseChart"></canvas>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Transactions List -->
+            <section id="transactions-section" class="glass-panel transactions-container">
+                <div class="section-header">
+                    <h3>Recent Transactions</h3>
+                    <div class="filters">
+                        <select id="filter-month">
+                            <option value="">All Months</option>
+                            <option value="01">January</option>
+                            <option value="02">February</option>
+                            <option value="03">March</option>
+                            <option value="04">April</option>
+                            <option value="05">May</option>
+                            <option value="06">June</option>
+                            <option value="07">July</option>
+                            <option value="08">August</option>
+                            <option value="09">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                        <select id="filter-category">
+                            <option value="">All Categories</option>
+                            <option value="Salary">Salary</option>
+                            <option value="Food">Food & Dining</option>
+                            <option value="Transport">Transportation</option>
+                            <option value="Housing">Housing & Rent</option>
+                            <option value="Utilities">Utilities</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <button id="export-btn" class="btn-secondary">Export CSV</button>
+                    </div>
+                </div>
+                
+                <div class="table-responsive">
+                    <table id="transactions-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactions-body">
+                            <!-- Transactions injected via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
