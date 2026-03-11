@@ -1,0 +1,8 @@
+# Python
+backend/venv/
+backend/__pycache__/
+*.pyc
+backend/database.db
+
+# OS
+.DS_Store
